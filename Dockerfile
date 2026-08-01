@@ -7,23 +7,17 @@ RUN go mod download
 
 COPY . .
 
-RUN mkdir -p /build
-
-RUN CGO_ENABLED=0 go build -o /build/gramsrv ./cmd/telesrv
-RUN CGO_ENABLED=0 go build -o /build/telesrv-admin ./cmd/telesrv-admin
+RUN CGO_ENABLED=0 go build -o /build/telesrv ./cmd/telesrv
 
 FROM debian:bookworm-slim
 
-RUN apt-get update && \
-    apt-get install -y ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y ca-certificates
 
 WORKDIR /app
 
-COPY --from=builder /build/gramsrv .
-COPY --from=builder /build/telesrv-admin .
-COPY .env .
+COPY --from=builder /build/telesrv /app/telesrv
+COPY . .
 
 EXPOSE 8080
 
-CMD sh -c "./gramsrv & ./telesrv-admin" 
+CMD ["/app/telesrv"]
