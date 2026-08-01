@@ -5529,7 +5529,6 @@ ALTER TABLE ONLY public.user_update_watermarks
 -- ===================== 规范 seed 数据 =====================
 -- 关触发器+FK 精确装载 seed（等价 pg_restore），避免 seed 其它表触发 read-model 触发器二次生成行而撞键。
 -- session_replication_role 需超级权限，与本迁移已有的 CREATE EXTENSION pg_trgm 同一前提。
-SET session_replication_role = replica;
 
 --
 -- PostgreSQL database dump
@@ -6112,5 +6111,3 @@ SELECT pg_catalog.setval('public.users_id_seq', 1780243199, true);
 --
 
 
-
-SET session_replication_role = DEFAULT;
